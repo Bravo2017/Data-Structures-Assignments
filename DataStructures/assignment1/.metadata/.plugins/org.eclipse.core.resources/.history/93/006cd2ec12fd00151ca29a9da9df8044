@@ -1,0 +1,60 @@
+package assignment3;
+import java.util.Stack;
+import java.util.regex.Matcher;
+public class Calculator {
+	
+	private static double enumerate(String operator, String operand1, String operand2){
+		double value = 0.0;
+		switch (operator){
+		case "+": value = Double.parseDouble(operand1) + Double.parseDouble(operand2);
+				  break;
+		case "-": value = Double.parseDouble(operand1) - Double.parseDouble(operand2);
+				  break;
+		case "*": value = Double.parseDouble(operand1) * Double.parseDouble(operand2);
+				  break;
+		case "/": value = Double.parseDouble(operand1) / Double.parseDouble(operand2);
+				  break;
+		default: //Throw exception here.
+		}
+		return value;
+	}
+	public static double evalInfix(String Expression){
+		Stack exp = new Stack();
+		double value = 0.0;
+		
+		String[] tokens = Expression.trim().split("\\s+");
+
+		for (int i = 0 ; i  < tokens.length ; i++){
+			System.out.println(tokens[i]);
+			exp.push(tokens[i]);
+		}
+		System.out.print(exp);
+		return 0.0;
+	}
+	
+	public static double evalPrefix(String Expression){
+		Stack<String> exp = new Stack<String>();
+		double value = 0.0;
+		double placeholder = 0.0;
+		String[] tokens = Expression.trim().split("\\s+");
+		
+		for (int i = tokens.length-1; i>=0 ; i--){
+			System.out.print(tokens[i]);
+			if (tokens[i].matches("[0-9]+"))
+				exp.push(tokens[i]);
+			else{
+				placeholder = enumerate(tokens[i], (String)exp.pop(), (String)exp.pop());
+				exp.push(Double.toString(placeholder));
+			}
+		}
+		value = Double.parseDouble(exp.pop());
+		return value;
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		evalPrefix(" / + * 2 2 6 - 3 1");
+		//evalInfix(" ( ( ( 2 * 2 ) + 6 ) / ( 3 - 1 ) ) ");
+	}
+
+}

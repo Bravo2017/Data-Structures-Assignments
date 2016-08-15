@@ -1,0 +1,81 @@
+package assignment3;
+import java.util.Stack;
+
+public class Calculator {
+	
+	private static double enumerate(String operator, String operand1, String operand2){
+		double value = 0.0;
+		switch (operator){
+		case "+": value = Double.parseDouble(operand1) + Double.parseDouble(operand2);
+				  break;
+		case "-": value = Double.parseDouble(operand1) - Double.parseDouble(operand2);
+				  break;
+		case "*": value = Double.parseDouble(operand1) * Double.parseDouble(operand2);
+				  break;
+		case "/": value = Double.parseDouble(operand1) / Double.parseDouble(operand2);
+				  break;
+		default: //Throw exception here.
+		}
+		return value;
+	}
+	public static double evalInfix(String Expression){
+		Stack exp = new Stack();
+		double value = 0.0;
+		
+		String[] tokens = Expression.trim().split("\\s+");
+
+		for (int i = 0 ; i  < tokens.length ; i++){
+			System.out.println(tokens[i]);
+			exp.push(tokens[i]);
+		}
+		System.out.print(exp);
+		return 0.0;
+	}
+	
+	public static double evalPrefix(String exp){
+		Stack<String> calculate = new Stack<String>();
+		double value = 0.0;
+		double placeholder = 0.0;
+		String[] tokens = exp.trim().split("\\s+");
+		
+		for (int i = tokens.length-1; i>=0 ; i--){
+		//	System.out.print(tokens[i]);
+			if (tokens[i].matches("[0-9]+"))
+				calculate.push(tokens[i]);
+			else{
+				placeholder = enumerate(tokens[i], (String)calculate.pop(), (String)calculate.pop());
+				calculate.push(Double.toString(placeholder));
+			}
+		}
+		value = Double.parseDouble(calculate.pop());
+		return value;
+	}
+	
+	public static String infixToPostfix(String exp){
+		Stack<String> operators = new Stack<String>();
+		String expression = "";
+		String[] tokens = exp.trim().split("\\s+");
+		
+		for (int i = 0 ; i  < tokens.length ; i++){
+			System.out.println(tokens[i]);
+			if (tokens[i].matches("[0-9]+")){
+				expression += tokens[i] + " ";
+			}
+			else if (tokens[i].equals(")")){
+				expression += operators.pop() + " ";
+				operators.pop();
+			}
+			else
+				operators.push(tokens[i]);
+		}
+		System.out.println(operators);
+		return expression;
+	}
+
+	public static void main(String[] args) {
+		//System.out.print(evalPrefix(" / + * 2 2 6 - 3 1"));
+		//System.out.print(evalInfix(" ( ( ( 2 * 2 ) + 6 ) / ( 3 - 1 ) ) "));
+		System.out.print(infixToPostfix("( ( ( 2 * 2 ) + 6 ) / ( 3 - 1 ) ))"));
+	}
+
+}
